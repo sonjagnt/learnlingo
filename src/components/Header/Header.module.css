@@ -31,4 +31,25 @@
 
 .buttons {
   display: flex;
+  gap: 16px;
+}
+
+.login {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.login button {
+  font-weight: 700;
+  font-size: 16px;
+}
+
+.blackBtn {
+  padding: 14px 40px;
+  border-radius: 12px;
+  background-color: var(--main);
+  color: var(--white);
+  font-weight: 700;
+  font-size: 16px;
 }

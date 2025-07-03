@@ -54,3 +54,7 @@ textarea {
   outline: none;
   border: none;
 }
+
+section {
+  padding: 0 64px 32px 64px;
+}

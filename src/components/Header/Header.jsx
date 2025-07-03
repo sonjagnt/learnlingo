@@ -17,11 +17,13 @@ export const Header = () => {
         <NavLink to="/teachers">Teachers</NavLink>
       </nav>
       <div className={s.buttons}>
-        <div>
-          <LuLogIn />
-          <button type="button">Login</button>
+        <div className={s.login}>
+          <LuLogIn color="var(--yellow)" size={20} />
+          <button type="button">Log in</button>
         </div>
-        <button type="button">Registration</button>
+        <button type="button" className={s.blackBtn}>
+          Registration
+        </button>
       </div>
     </header>
   );
