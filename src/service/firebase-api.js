@@ -1,25 +1,25 @@
 import {
   get,
   ref,
-  orderByChild,
   limitToFirst,
   startAt,
   query,
+  orderByKey,
 } from "firebase/database";
 import { database } from "../utils/firebase";
 
 export const fetchTeachers = async (startFrom = null, pageSize = 4) => {
-  const dbRef = ref(database);
-
   try {
+    const teachersRef = ref(database, "/");
+
     const postsQuery = startFrom
       ? query(
-          dbRef,
-          orderByChild("id"),
-          startAt(startFrom + 1),
+          teachersRef,
+          orderByKey(),
+          startAt(startFrom),
           limitToFirst(pageSize)
         )
-      : query(dbRef, orderByChild("id"), limitToFirst(pageSize));
+      : query(teachersRef, orderByKey(), limitToFirst(pageSize));
 
     const snapshot = await get(postsQuery);
 
