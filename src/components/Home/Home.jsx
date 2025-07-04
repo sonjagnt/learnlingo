@@ -19,7 +19,7 @@ export const Home = () => {
         </button>
       </div>
 
-      <img src={img} />
+      <img src={img} className={s.heroImg} />
 
       <ul className={s.statList}>
         <li>

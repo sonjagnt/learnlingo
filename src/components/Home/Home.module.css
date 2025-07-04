@@ -35,7 +35,7 @@
 .btn {
   border-radius: 12px;
   padding: 16px 88px;
-  width: 267px;
+  min-width: 268px;
   height: 60px;
   background-color: var(--yellow);
   font-weight: 700;
