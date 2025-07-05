@@ -24,6 +24,7 @@ export default defineConfig([
     },
     rules: {
       "no-unused-vars": ["error", { varsIgnorePattern: "^[A-Z_]" }],
+      "react/jsx-filename-extension": [1, { extensions: [".js", ".jsx"] }],
     },
   },
 ]);

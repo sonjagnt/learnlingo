@@ -5,12 +5,14 @@ import { IoBookOutline } from "react-icons/io5";
 import { FaRegHeart } from "react-icons/fa";
 import { TiStarFullOutline } from "react-icons/ti";
 import toast, { Toaster } from "react-hot-toast";
-import { isLoggedIn } from "../../utils/firebase";
+import { useAuth } from "../../contexts/auth-context";
 
 export const TeachersList = () => {
   const [teachers, setTeachers] = useState([]);
   const [currentCursor, setCursor] = useState(null);
   const [isEnd, setIsEnd] = useState(false);
+
+  const { user } = useAuth();
 
   async function handleLoadMore() {
     const pageSize = 4;
@@ -51,11 +53,13 @@ export const TeachersList = () => {
   }
 
   const userNotify = () => {
-    if (isLoggedIn) {
-      console.log("logged in");
-    } else {
-      toast("Please, log in to use this");
+    if (!user) {
+      toast("Please log in to use this", {
+        icon: "🙏",
+        position: "bottom-center",
+      });
     }
+    return;
   };
   useEffect(() => {
     const getTeachers = async () => {

@@ -2,9 +2,17 @@ import { Link, NavLink } from "react-router";
 import logo from "../../assets/logo.svg";
 import { LuLogIn, LuLogOut } from "react-icons/lu";
 import s from "./Header.module.css";
-import { isLoggedIn } from "../../utils/firebase";
+import { auth } from "../../utils/firebase";
+import { useAuth } from "../../contexts/auth-context";
 
 export const Header = ({ onLogin, onRegister }) => {
+  const { user } = useAuth();
+  const handleLogOut = () => {
+    auth.signOut().then(() => {
+      console.log("Signed out");
+    });
+  };
+
   return (
     <header className={s.header}>
       <div className={s.logo}>
@@ -16,11 +24,14 @@ export const Header = ({ onLogin, onRegister }) => {
       <nav className={s.nav}>
         <NavLink to="/">Home</NavLink>
         <NavLink to="/teachers">Teachers</NavLink>
+        {user && <NavLink to="/favorites">Favorites</NavLink>}
       </nav>
-      {isLoggedIn ? (
+      {user ? (
         <div className={s.login}>
           <LuLogOut size={20} />
-          <button>Log Out</button>
+          <button type="button" onClick={() => handleLogOut()}>
+            Log Out
+          </button>
         </div>
       ) : (
         <div className={s.buttons}>

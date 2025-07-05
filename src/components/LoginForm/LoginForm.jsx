@@ -3,13 +3,14 @@ import * as Yup from "yup";
 import { auth } from "../../utils/firebase";
 import { useForm } from "react-hook-form";
 import { signInWithEmailAndPassword } from "firebase/auth";
+import("../../ui/forms.css");
 
 const schema = Yup.object().shape({
   email: Yup.string().required("Email is required"),
   password: Yup.string().required("Password is required"),
 });
 
-export const LoginForm = () => {
+export const LoginForm = ({ onClose }) => {
   const {
     register,
     handleSubmit,
@@ -19,21 +20,27 @@ export const LoginForm = () => {
   const onSubmit = async ({ email, password }) => {
     try {
       await signInWithEmailAndPassword(auth, email, password);
-      console.log("logged in");
+      onClose();
     } catch (e) {
       console.log(e.message);
     }
   };
   return (
-    <div>
-      LoginForm
-      <form onSubmit={handleSubmit(onSubmit)}>
+    <>
+      <div className={s.text}>
+        <h2>Log In</h2>
+        <p>
+          Welcome back! Please enter your credentials to access your account and
+          continue your search for an teacher.
+        </p>
+      </div>
+      <form onSubmit={handleSubmit(onSubmit)} className={s.form}>
         <input placeholder="Email" {...register("email")} />
         <span>{errors.email?.message}</span>
         <input placeholder="Password" {...register("password")} />
         <span>{errors.password?.message}</span>
         <button type="submit">Log In</button>
       </form>
-    </div>
+    </>
   );
 };

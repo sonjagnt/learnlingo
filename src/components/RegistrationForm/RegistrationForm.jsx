@@ -3,6 +3,7 @@ import { auth } from "../../utils/firebase";
 import { useForm } from "react-hook-form";
 import * as Yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
+import("../../ui/forms.css");
 
 const validationSchema = Yup.object().shape({
   name: Yup.string()
@@ -20,7 +21,7 @@ const validationSchema = Yup.object().shape({
     .required("Password is required"),
 });
 
-export const RegistrationForm = () => {
+export const RegistrationForm = ({ onClose }) => {
   const {
     register,
     handleSubmit,
@@ -37,7 +38,7 @@ export const RegistrationForm = () => {
       await updateProfile(userCredential.user, {
         displayName: name,
       });
-      console.log("lucky you!");
+      onClose();
     } catch (e) {
       console.log(e.message);
     }
@@ -45,7 +46,15 @@ export const RegistrationForm = () => {
 
   return (
     <div>
-      RegistrationForm
+      <div className="text">
+        <h2>Registration</h2>
+        <p>
+          Thank you for your interest in our platform! In order to register, we
+          need some information. Please provide us with the following
+          information
+        </p>
+      </div>
+
       <form onSubmit={handleSubmit(onSubmit)}>
         <input {...register("name")} placeholder="Name" />
         <span>{errors.name?.message}</span>

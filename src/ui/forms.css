@@ -1,0 +1,51 @@
+h2 {
+  font-weight: 500;
+  font-size: 40px;
+  line-height: 120%;
+  letter-spacing: -0.02em;
+  margin-bottom: 40px;
+}
+
+.text {
+  margin-bottom: 40px;
+  color: var(--main);
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 137%;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+}
+
+form input {
+  border: 1px solid rgba(18, 20, 23, 01);
+  border-radius: 12px;
+  padding-left: 18px;
+  padding-bottom: 16px;
+  padding-top: 16px;
+  max-width: 438px;
+  height: 54px;
+  margin-bottom: 18px;
+}
+
+form input::placeholder {
+  font-size: 16px;
+  color: var(--main);
+}
+
+form input:last-of-type {
+  margin-bottom: 40px;
+}
+
+form button {
+  border-radius: 12px;
+  padding: 16px 88px;
+  min-width: 268px;
+  height: 60px;
+  background-color: var(--yellow);
+  font-weight: 700;
+  font-size: 18px;
+  line-height: 156%;
+}
