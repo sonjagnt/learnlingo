@@ -26,7 +26,7 @@
 }
 
 .accent {
-  background-color: rgba(251, 233, 186, 1);
+  background-color: var(--yellowPale);
   border-radius: 8px;
   font-weight: 400;
   font-style: italic;

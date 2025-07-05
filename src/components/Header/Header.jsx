@@ -1,9 +1,10 @@
 import { Link, NavLink } from "react-router";
 import logo from "../../assets/logo.svg";
-import { LuLogIn } from "react-icons/lu";
+import { LuLogIn, LuLogOut } from "react-icons/lu";
 import s from "./Header.module.css";
+import { isLoggedIn } from "../../utils/firebase";
 
-export const Header = () => {
+export const Header = ({ onLogin, onRegister }) => {
   return (
     <header className={s.header}>
       <div className={s.logo}>
@@ -16,15 +17,24 @@ export const Header = () => {
         <NavLink to="/">Home</NavLink>
         <NavLink to="/teachers">Teachers</NavLink>
       </nav>
-      <div className={s.buttons}>
+      {isLoggedIn ? (
         <div className={s.login}>
-          <LuLogIn color="var(--yellow)" size={20} />
-          <button type="button">Log in</button>
+          <LuLogOut size={20} />
+          <button>Log Out</button>
         </div>
-        <button type="button" className={s.blackBtn}>
-          Registration
-        </button>
-      </div>
+      ) : (
+        <div className={s.buttons}>
+          <div className={s.login}>
+            <LuLogIn color="var(--yellow)" size={20} />
+            <button type="button" onClick={onLogin}>
+              Log in
+            </button>
+          </div>
+          <button type="button" className={s.blackBtn} onClick={onRegister}>
+            Registration
+          </button>
+        </div>
+      )}
     </header>
   );
 };

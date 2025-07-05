@@ -1,3 +1,10 @@
+.listContainer {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+}
+
 .teacherList {
   margin-bottom: 64px;
 }
@@ -90,4 +97,19 @@
   border: 1px solid rgba(18, 20, 23, 0.2);
   border-radius: 35px;
   padding: 8px 12px;
+}
+
+.btn {
+  border-radius: 12px;
+  max-width: fit-content;
+  padding: 16px 88px;
+  height: 60px;
+  background-color: var(--yellow);
+  font-weight: 700;
+  font-size: 18px;
+  line-height: 156%;
+}
+
+.btn:hover {
+  background-color: var(--yellowPale);
 }
