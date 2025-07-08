@@ -33,6 +33,7 @@
 }
 
 .btn {
+  color: var(--main);
   border-radius: 12px;
   padding: 16px 88px;
   min-width: 268px;

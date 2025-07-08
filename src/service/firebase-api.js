@@ -1,12 +1,14 @@
 import {
   get,
   ref,
+  set,
   limitToFirst,
   startAt,
   query,
   orderByKey,
 } from "firebase/database";
 import { database } from "../utils/firebase";
+import { getAuth } from "firebase/auth";
 
 export const fetchTeachers = async (startFrom = null, pageSize = 4) => {
   const teachersRef = ref(database, "/");
@@ -33,3 +35,18 @@ export const fetchTeachers = async (startFrom = null, pageSize = 4) => {
     return [];
   }
 };
+
+export const addToFavorites = async (userId, itemId, itemDetails) => {
+  const user = getAuth();
+  if (!user) {
+    throw new Error("User is not authenticated");
+  }
+
+  const favoritesRef = ref(database, `users/${userId}/favorites/${itemId}`);
+  try {
+    await set(favoritesRef, itemDetails);
+
+  } catch (error) {
+    console.error( error);
+  }
+}

@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { fetchTeachers } from "../../service/firebase-api";
+import { addToFavorites, fetchTeachers } from "../../service/firebase-api";
 import s from "./TeachersList.module.css";
 import { IoBookOutline } from "react-icons/io5";
 import { FaRegHeart } from "react-icons/fa";
@@ -61,6 +61,34 @@ export const TeachersList = () => {
     }
     return;
   };
+
+ const addFavorite = async (teacherId) => {
+  if (!user) {
+    toast("Please log in to use this", {
+      icon: "🙏",
+      position: "bottom-center",
+    });
+    return;
+  }
+
+  const teacher = teachers.find((teacher) => teacher.id === teacherId);
+  if (!teacher) return;
+
+  try {
+    await addToFavorites(user.uid, teacher.id, teacher); 
+    toast("Teacher added to favorites!", {
+      icon: "❤️",
+      position: "bottom-center",
+    });
+  } catch (e) {
+    console.log(e.message);
+    toast("Failed to add to favorites. Please try again.", {
+      icon: "❌",
+      position: "bottom-center",
+    });
+  }
+};
+
   useEffect(() => {
     const getTeachers = async () => {
       const list = await fetchTeachers();
@@ -92,7 +120,7 @@ export const TeachersList = () => {
                 <li>Price/1 hour: {teacher.price_per_hour}</li>
               </ul>
               <button type="button">
-                <FaRegHeart size={26} onClick={userNotify} />
+                <FaRegHeart size={26} onClick={() => addFavorite(teacher.id)} />
               </button>
               <Toaster />
             </div>
