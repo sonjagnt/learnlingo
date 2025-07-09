@@ -3,19 +3,24 @@ import {
   ref,
   set,
   limitToFirst,
-  startAt,
+ orderByKey,
+  startAfter, 
   query,
-  orderByKey,
+
 } from "firebase/database";
 import { database } from "../utils/firebase";
 import { getAuth } from "firebase/auth";
-
 
 export const fetchTeachers = async (startFrom = null, pageSize = 4) => {
   const teachersRef = ref(database, "/teachers");
 
   const teachersQuery = startFrom
-    ? query(teachersRef, orderByKey(), startAfter(startFrom), limitToFirst(pageSize))
+    ? query(
+        teachersRef,
+        orderByKey(),
+        startAfter(String(startFrom)),
+        limitToFirst(pageSize)
+      )
     : query(teachersRef, orderByKey(), limitToFirst(pageSize));
 
   const snapshot = await get(teachersQuery);
@@ -43,6 +48,7 @@ export const fetchTeachers = async (startFrom = null, pageSize = 4) => {
     };
   }
 };
+
 export const addToFavorites = async (userId, itemId, itemDetails) => {
   const user = getAuth();
   if (!user) {

@@ -11,6 +11,7 @@ import {  selectIsEnd, selectIsLoading, selectLastKey, selectTeachers } from "..
 import { loadTeachers } from "../../redux/teachersSlice";
 import { DotLoader } from "react-spinners";
 
+
 export const TeachersList = () => {
 
   const teachers = useSelector(selectTeachers);
@@ -56,11 +57,13 @@ const handleLoadMore = () => {
   }
 };
 
-  useEffect(() => {
-     if (teachers.length === 0) {
-   dispatch(loadTeachers({ lastKey: null, limit: 4 }));}
 
-  }, [ dispatch, teachers.length]);
+
+
+  useEffect(() => {
+    dispatch(loadTeachers({ lastKey: null, limit: 4 }));
+  }, [dispatch]);
+
 
   return (
     <div className={s.listContainer}>
