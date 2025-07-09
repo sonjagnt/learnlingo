@@ -10,19 +10,15 @@ import {
 import { database } from "../utils/firebase";
 import { getAuth } from "firebase/auth";
 
+
 export const fetchTeachers = async (startFrom = null, pageSize = 4) => {
   const teachersRef = ref(database, "/teachers");
 
-  const postsQuery = startFrom
-    ? query(
-        teachersRef,
-        orderByKey(),
-        startAt(startFrom),
-        limitToFirst(pageSize)
-      )
+  const teachersQuery = startFrom
+    ? query(teachersRef, orderByKey(), startAfter(startFrom), limitToFirst(pageSize))
     : query(teachersRef, orderByKey(), limitToFirst(pageSize));
 
-  const snapshot = await get(postsQuery);
+  const snapshot = await get(teachersQuery);
 
   if (snapshot.exists()) {
     const data = snapshot.val();
@@ -30,12 +26,23 @@ export const fetchTeachers = async (startFrom = null, pageSize = 4) => {
       id,
       ...teacher,
     }));
-    return list;
+
+    const lastKey = list.length > 0 ? list[list.length - 1].id : null;
+    const hasMore = list.length === pageSize;
+
+    return {
+      teachers: list,
+      lastKey,
+      hasMore,
+    };
   } else {
-    return [];
+    return {
+      teachers: [],
+      lastKey: null,
+      hasMore: false,
+    };
   }
 };
-
 export const addToFavorites = async (userId, itemId, itemDetails) => {
   const user = getAuth();
   if (!user) {
