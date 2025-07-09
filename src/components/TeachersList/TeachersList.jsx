@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { addToFavorites, fetchTeachers } from "../../service/firebase-api";
+import { addToFavorites } from "../../service/firebase-api";
 import s from "./TeachersList.module.css";
 import { IoBookOutline } from "react-icons/io5";
 import { FaRegHeart } from "react-icons/fa";
@@ -24,11 +24,11 @@ export const TeachersList = () => {
 
   
 const handleLoadMore = () => {
-  console.log("payload.teachers:", teachers.map(t => t.id));
-    console.log("Load More clicked", { isEnd, isLoading, lastKey });
   if (!isEnd && !isLoading) {
     dispatch(loadTeachers({ lastKey, limit: 4 }));
   }
+  if (isEnd) {
+    toast("Seems like you've scrolled through all the teachers!", {icon: "😞"})}
 };
 
  const addFavorite = async (teacherId) => {
@@ -66,9 +66,11 @@ const handleLoadMore = () => {
 
 
   return (
-    <div className={s.listContainer}>
+    <section className={s.listContainer}>
       <ul className={s.teacherList}>
-        <DotLoader color="var(--yellow)" loading={isLoading}/>
+        <div className={s.loader} >
+          <DotLoader color="var(--yellow)" loading={isLoading}/>
+        </div>
         {teachers.map((teacher) => (
           <li key={teacher.id} className={s.card}>
             <div className={s.cardHeader}>
@@ -124,14 +126,13 @@ const handleLoadMore = () => {
           </li>
         ))}
       </ul>
-      {isEnd && !isLoading && ( <Toaster />)}
+      {isEnd &&  (<Toaster />)}
  
 {!isEnd && !isLoading && (
   <button type="button" onClick={handleLoadMore} className={s.btn}>
     Load more
   </button>
 )}
-
-    </div>
+    </section>
   );
 };
