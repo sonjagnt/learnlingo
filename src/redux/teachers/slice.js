@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { fetchTeachers } from "../service/firebase-api";
+import { fetchTeachers } from "../../service/firebase-api";
 
 const handlePending = (state) => {
     state.isLoading = true;
@@ -44,16 +44,10 @@ export const loadTeachers = createAsyncThunk(
         builder
         .addCase(loadTeachers.pending, handlePending)
         .addCase(loadTeachers.fulfilled, (state, action) => {
-            console.log("loadTeachers.fulfilled", action.payload);
-            
-
  const { teachers, lastKey, hasMore } = action.payload;
-
   const existingIds = new Set(state.teachers.map(t => t.id));
   const uniqueTeachers = teachers.filter(t => !existingIds.has(t.id));
-
   state.teachers.push(...uniqueTeachers);
-  
   if (teachers.length > 0) {
     state.lastKey = lastKey;
   }

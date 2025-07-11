@@ -7,8 +7,8 @@ import { TiStarFullOutline } from "react-icons/ti";
 import toast, { Toaster } from "react-hot-toast";
 import { useAuth } from "../../contexts/auth-context";
 import { useDispatch, useSelector } from "react-redux";
-import {  selectIsEnd, selectIsLoading, selectLastKey, selectTeachers } from "../../redux/teachersSelectors";
-import { loadTeachers } from "../../redux/teachersSlice";
+import {  selectIsEnd, selectIsLoading, selectLastKey, selectTeachers } from "../../redux/teachers/selectors";
+import { loadTeachers } from "../../redux/teachers/slice";
 import { DotLoader } from "react-spinners";
 
 
@@ -46,6 +46,7 @@ const handleLoadMore = () => {
     await addToFavorites(user.uid, teacher.id, teacher); 
     toast("Teacher added to favorites!", {
       icon: "❤️",
+      position: "bottom-center",
   
     });
   } catch (e) {
@@ -68,9 +69,7 @@ const handleLoadMore = () => {
   return (
     <section className={s.listContainer}>
       <ul className={s.teacherList}>
-        <div className={s.loader} >
           <DotLoader color="var(--yellow)" loading={isLoading}/>
-        </div>
         {teachers.map((teacher) => (
           <li key={teacher.id} className={s.card}>
             <div className={s.cardHeader}>

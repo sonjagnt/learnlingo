@@ -50,7 +50,7 @@ export const fetchTeachers = async (startFrom = null, pageSize = 4) => {
 };
 
 export const addToFavorites = async (userId, itemId, itemDetails) => {
-  const user = getAuth();
+  const user = getAuth().currentUser;
   if (!user) {
     throw new Error("User is not authenticated");
   }
@@ -63,6 +63,7 @@ export const addToFavorites = async (userId, itemId, itemDetails) => {
 }
 
 export const removeFromFavorites = async (userId, itemId) => {
+  const user = getAuth().currentUser;
   if (!user) {
     throw new Error("User is not authenticated");
   }
@@ -74,3 +75,22 @@ export const removeFromFavorites = async (userId, itemId) => {
     e.message
   }
 }
+
+export const fetchFavorites = async (userId) => {
+  const favoritesRef = ref(database, `users/${userId}/favorites`);
+  const snapshot = await get(favoritesRef);
+
+  if (snapshot.exists()) {
+    const data = snapshot.val();
+
+    const response = Object.entries(data)
+      .filter(([_, details]) => details !== null && details !== undefined)
+      .map(([id, details]) => ({
+        id,
+        ...details,
+      }));
+      return response;
+  } else {
+    return [];
+  }
+};
