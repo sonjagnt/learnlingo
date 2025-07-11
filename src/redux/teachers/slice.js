@@ -13,9 +13,10 @@ const handleRejected = (state, action) => {
 
 export const loadTeachers = createAsyncThunk(
   "teachers/load",
-  async ({ lastKey, limit }, { rejectWithValue }) => {
+  async ({ lastKey, limit, filters }, { rejectWithValue }) => {
     try {
-      const data = await fetchTeachers(lastKey, limit);
+      const data = await fetchTeachers(lastKey, limit, filters);
+      
       return data;
     } catch (err) {
       return rejectWithValue(err.message);

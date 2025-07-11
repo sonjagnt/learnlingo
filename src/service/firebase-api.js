@@ -11,42 +11,59 @@ import {
 import { database } from "../utils/firebase";
 import { getAuth } from "firebase/auth";
 
-export const fetchTeachers = async (startFrom = null, pageSize = 4) => {
+export const fetchTeachers = async (
+  startFrom = null,
+  pageSize = 4,
+  filters = {}
+) => {
+  const { language, level, price } = filters;
   const teachersRef = ref(database, "/teachers");
 
-  const teachersQuery = startFrom
-    ? query(
-        teachersRef,
-        orderByKey(),
-        startAfter(String(startFrom)),
-        limitToFirst(pageSize)
-      )
-    : query(teachersRef, orderByKey(), limitToFirst(pageSize));
+  const snapshot = await get(query(teachersRef, orderByKey(), limitToFirst(1000)));
 
-  const snapshot = await get(teachersQuery);
-
-  if (snapshot.exists()) {
-    const data = snapshot.val();
-    const list = Object.entries(data).map(([id, teacher]) => ({
-      id,
-      ...teacher,
-    }));
-
-    const lastKey = list.length > 0 ? list[list.length - 1].id : null;
-    const hasMore = list.length === pageSize;
-
-    return {
-      teachers: list,
-      lastKey,
-      hasMore,
-    };
-  } else {
-    return {
-      teachers: [],
-      lastKey: null,
-      hasMore: false,
-    };
+  if (!snapshot.exists()) {
+    return { teachers: [], lastKey: null, hasMore: false };
   }
+
+  let list = Object.entries(snapshot.val()).map(([id, teacher]) => ({
+    id,
+    ...teacher,
+  }));
+
+  list = list.filter((teacher) => {
+    const languageMatch = language
+      ? Array.isArray(teacher.languages) && teacher.languages.includes(language)
+      : true;
+
+    const levelMatch = level
+      ? Array.isArray(teacher.levels) && teacher.levels.includes(level)
+      : true;
+
+    const priceMatch = price
+      ? teacher.price_per_hour <= parseInt(price, 10)
+      : true;
+
+    return languageMatch && levelMatch && priceMatch;
+  });
+
+  list.sort((a, b) => (a.id > b.id ? 1 : -1));
+
+  let startIndex = 0;
+  if (startFrom) {
+    const index = list.findIndex((t) => t.id === startFrom);
+    startIndex = index >= 0 ? index + 1 : 0;
+  }
+
+  const paged = list.slice(startIndex, startIndex + pageSize);
+
+  const lastKey = paged.length > 0 ? paged[paged.length - 1].id : null;
+  const hasMore = startIndex + pageSize < list.length;
+
+  return {
+    teachers: paged,
+    lastKey,
+    hasMore,
+  };
 };
 
 export const addToFavorites = async (userId, itemId, itemDetails) => {

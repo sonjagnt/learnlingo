@@ -8,11 +8,17 @@ import toast, { Toaster } from "react-hot-toast";
 import { useAuth } from "../../contexts/auth-context";
 import { useDispatch, useSelector } from "react-redux";
 import {  selectIsEnd, selectIsLoading, selectLastKey, selectTeachers } from "../../redux/teachers/selectors";
-import { loadTeachers } from "../../redux/teachers/slice";
+import { selectLanguages, selectLevels, selectPrice } from "../../redux/filters/selectors";
+import { clearTeachers, loadTeachers } from "../../redux/teachers/slice";
 import { DotLoader } from "react-spinners";
+import { FilterBar } from "../FilterBar/FirlterBar";
 
 
 export const TeachersList = () => {
+
+  const languages = useSelector(selectLanguages);
+  const levels = useSelector(selectLevels);
+  const price = useSelector(selectPrice);
 
   const teachers = useSelector(selectTeachers);
   const lastKey = useSelector(selectLastKey);
@@ -21,6 +27,8 @@ export const TeachersList = () => {
   const dispatch = useDispatch();
 
   const { user } = useAuth();
+
+
 
   
 const handleLoadMore = () => {
@@ -58,16 +66,16 @@ const handleLoadMore = () => {
   }
 };
 
-
-
-
   useEffect(() => {
-    dispatch(loadTeachers({ lastKey: null, limit: 4 }));
-  }, [dispatch]);
-
+    dispatch(clearTeachers());
+    
+    dispatch(loadTeachers({ lastKey: null, limit: 4, filters: {language: languages, level: levels, price: price} }));
+    
+  }, [dispatch, languages, levels, price]);
 
   return (
     <section className={s.listContainer}>
+      <FilterBar/>
       <ul className={s.teacherList}>
           <DotLoader color="var(--yellow)" loading={isLoading}/>
         {teachers.map((teacher) => (
