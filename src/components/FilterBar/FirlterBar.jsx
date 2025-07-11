@@ -1,8 +1,11 @@
 import { useDispatch, useSelector } from 'react-redux';
 import Select from 'react-select';
 import { setLevels, setLanguages, setPrice } from '../../redux/filters/slice';
-import { selectLanguages, selectLevels, selectPrice } from '../../redux/filters/selectors';
 import { useEffect } from 'react';
+import { selectTeachers } from '../../redux/teachers/selectors';
+
+
+
 
 const levelOptions = [
   { value: 'A1 Beginner', label: 'A1' },
@@ -18,6 +21,10 @@ const languageOptions = [
   { value: 'Spanish', label: 'Spanish' },
   { value: 'French', label: 'French' },
   { value: 'German', label: 'German' },
+  { value: 'Mandarin Chinese', label: 'Mandarin Chinese' },
+  {value: 'Korean', label: 'Korean'},
+  {value: "Italian", label: "Italian"},
+  {value: "Vietnamese", label: "Vietnamese"},
 
 ];
 
@@ -31,16 +38,15 @@ const priceOptions = [
 ];
 
 export const FilterBar = () => {
+
+
 const allState = useSelector(s => s);
 console.log("ALL STATE", allState);
 
 const languages = allState.filters.languages;
 const levels = allState.filters.levels;
 const price = allState.filters.price;
-    
-//   const languages = useSelector(selectLanguages);
-//   const levels = useSelector(selectLevels);
-//   const price = useSelector(selectPrice);
+
 
   const dispatch = useDispatch();
   

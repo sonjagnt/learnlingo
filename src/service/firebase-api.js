@@ -31,8 +31,10 @@ export const fetchTeachers = async (
   }));
 
   list = list.filter((teacher) => {
+    const normalize = str => str.toLowerCase().replace(/\s+/g, '');
+
     const languageMatch = language
-      ? Array.isArray(teacher.languages) && teacher.languages.includes(language)
+      ? Array.isArray(teacher.languages) && teacher.languages.map(l => normalize(l)).includes(normalize(language))
       : true;
 
     const levelMatch = level
@@ -45,8 +47,6 @@ export const fetchTeachers = async (
 
     return languageMatch && levelMatch && priceMatch;
   });
-
-  list.sort((a, b) => (a.id > b.id ? 1 : -1));
 
   let startIndex = 0;
   if (startFrom) {

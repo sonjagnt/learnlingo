@@ -33,7 +33,7 @@ export const TeachersList = () => {
   
 const handleLoadMore = () => {
   if (!isEnd && !isLoading) {
-    dispatch(loadTeachers({ lastKey, limit: 4 }));
+    dispatch(loadTeachers({ lastKey, limit: 4, filters: {language: languages, level: levels, price: price} }));
   }
   if (isEnd) {
     toast("Seems like you've scrolled through all the teachers!", {icon: "😞"})}
