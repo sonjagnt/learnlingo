@@ -1,0 +1,31 @@
+import { FaUser } from "react-icons/fa";
+import { TiStarFullOutline } from "react-icons/ti";
+import s from "./TeacherDetails.module.css";
+
+export const TeacherDetails = ({ teacher }) => {
+  return (
+    <div className={s.details}>
+      <p>{teacher.experience}</p>
+      {teacher.reviews.map((r) => (
+        <div key={r.comment}>
+          <div className={s.reviewer}>
+            <div className={s.iconWrapper}>
+              <FaUser color="var(--white)" size={18} />
+            </div>
+            <p>{r.reviewer_name}</p>
+            <span className={s.rating}>
+              <TiStarFullOutline color="var(--yellow)" />
+              <p>
+                {r.reviewer_rating.toLocaleString("en-US", {
+                  minimumFractionDigits: 1,
+                  minimumIntegerDigits: 1,
+                })}
+              </p>
+            </span>
+          </div>
+          <p className={s.comment}>{r.comment}</p>
+        </div>
+      ))}
+    </div>
+  );
+};

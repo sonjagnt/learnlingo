@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { addToFavorites } from "../../service/firebase-api";
 import s from "./TeachersList.module.css";
 import { IoBookOutline } from "react-icons/io5";
@@ -12,9 +12,12 @@ import { selectLanguages, selectLevels, selectPrice } from "../../redux/filters/
 import { clearTeachers, loadTeachers } from "../../redux/teachers/slice";
 import { DotLoader } from "react-spinners";
 import { FilterBar } from "../FilterBar/FirlterBar";
+import { TeacherDetails } from "../TeacherDetails/TeacherDetails";
 
 
 export const TeachersList = () => {
+  
+  const [detailsId, setDetailsId] = useState(null);
 
   const languages = useSelector(selectLanguages);
   const levels = useSelector(selectLevels);
@@ -27,9 +30,6 @@ export const TeachersList = () => {
   const dispatch = useDispatch();
 
   const { user } = useAuth();
-
-
-
   
 const handleLoadMore = () => {
   if (!isEnd && !isLoading) {
@@ -92,7 +92,7 @@ const handleLoadMore = () => {
                   <TiStarFullOutline fill="var(--yellow)" />
                   Rating: {teacher.rating}
                 </li>
-                <li>Price/1 hour: {teacher.price_per_hour}</li>
+                <li>Price/1 hour: {teacher.price_per_hour}$</li>
               </ul>
               <button type="button">
                 <FaRegHeart size={26} onClick={() => addFavorite(teacher.id)} />
@@ -119,9 +119,9 @@ const handleLoadMore = () => {
                   {teacher.conditions}
                 </li>
               </ul>
-              <button type="button" className={s.readMoreBtn}>
+              {detailsId === teacher.id ? <TeacherDetails teacher={teacher}/> : <button type="button" className={s.readMoreBtn} onClick={() => setDetailsId(teacher.id)}>
                 Read more
-              </button>
+              </button>}
             </div>
             <ul className={s.lvls}>
               {teacher.levels.map((level) => (

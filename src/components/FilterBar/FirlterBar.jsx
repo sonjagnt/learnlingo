@@ -1,9 +1,7 @@
 import { useDispatch, useSelector } from 'react-redux';
 import Select from 'react-select';
 import { setLevels, setLanguages, setPrice } from '../../redux/filters/slice';
-import { useEffect } from 'react';
-import { selectTeachers } from '../../redux/teachers/selectors';
-
+import { selectLanguages, selectLevels, selectPrice } from '../../redux/filters/selectors';
 
 
 
@@ -40,12 +38,10 @@ const priceOptions = [
 export const FilterBar = () => {
 
 
-const allState = useSelector(s => s);
-console.log("ALL STATE", allState);
 
-const languages = allState.filters.languages;
-const levels = allState.filters.levels;
-const price = allState.filters.price;
+const languages = useSelector(selectLanguages);
+const levels = useSelector(selectLevels);
+const price = useSelector(selectPrice);
 
 
   const dispatch = useDispatch();
@@ -60,9 +56,6 @@ const price = allState.filters.price;
   const handlePriceChange = (selected) => {
     dispatch(setPrice(selected ? selected.value : null));
   };
-  useEffect(() => {
-  console.log("USE EFFECT LANGUAGES:", languages);
-}, [languages]);
 
   const selectedLevelOption = levels ? levelOptions.find(opt => opt.value === levels) : null;
   const selectedLanguageOption = languages ? languageOptions.find(opt => opt.value === languages) : null;

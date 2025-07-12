@@ -1,0 +1,42 @@
+.details {
+  display: flex;
+  gap: 16px;
+  flex-direction: column;
+  margin-bottom: 32px;
+  font-weight: 400;
+}
+
+.reviewer {
+  font-weight: 500;
+  display: grid;
+  grid-template-areas:
+    "i n"
+    "i r";
+  gap: 2px 12px;
+  grid-template-columns: 44px auto;
+  justify-content: start;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.comment {
+  font-weight: 500;
+}
+
+.iconWrapper {
+  background-color: var(--dark-gray);
+  grid-area: i;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  width: 44px;
+  height: 44px;
+}
+
+.rating {
+  grid-area: r;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
