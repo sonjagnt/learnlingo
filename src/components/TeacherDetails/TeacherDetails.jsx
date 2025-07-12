@@ -1,8 +1,21 @@
 import { FaUser } from "react-icons/fa";
 import { TiStarFullOutline } from "react-icons/ti";
 import s from "./TeacherDetails.module.css";
+import { ModalWindow } from "../../ui/ModalWindow";
+import { useState } from "react";
+import { BookingForm } from "../BookingForm/BookingForm";
 
 export const TeacherDetails = ({ teacher }) => {
+  const [isOpen, setIsOpen] = useState(false);
+
+  const handleOpen = () => {
+    setIsOpen(true);
+  };
+
+  const handleClose = () => {
+    setIsOpen(false);
+  };
+
   return (
     <div className={s.details}>
       <p>{teacher.experience}</p>
@@ -26,6 +39,12 @@ export const TeacherDetails = ({ teacher }) => {
           <p className={s.comment}>{r.comment}</p>
         </div>
       ))}
+      <button type="button" onClick={handleOpen}>
+        Book trial lesson
+      </button>
+      <ModalWindow isOpen={isOpen} onClose={handleClose}>
+        {<BookingForm teacher={teacher} />}
+      </ModalWindow>
     </div>
   );
 };
