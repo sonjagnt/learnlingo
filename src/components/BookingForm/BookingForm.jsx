@@ -1,7 +1,6 @@
 import { useForm } from "react-hook-form";
 import * as Yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { sendEmailVerification, signInWithEmailLink } from "firebase/auth";
 import { useAuth } from "../../contexts/auth-context";
 import s from "./BookingForm.module.css";
 import toast from "react-hot-toast";
@@ -30,7 +29,7 @@ export const BookingForm = ({ teacher }) => {
     formState: { errors },
   } = useForm({ resolver: yupResolver(validationSchema) });
 
-  const onSubmit = ({ name, email, phoneNumber, reason }) => {
+  const onSubmit = ({ name, email, phoneNumber }) => {
     if (user) {
       toast(
         `Thank you, ${name}! Your trial lesson with ${teacher.name} has been booked successfully!`,
@@ -39,61 +38,69 @@ export const BookingForm = ({ teacher }) => {
         }
       );
 
-      //      {
-      //     name,
-      //     email,
-      //     phoneNumber,
-      //     reason,
-      //     teacher: { name: teacher.name, surname: teacher.surname },
-      //   }
+      localStorage.setItem(
+        "bookingDetails",
+        JSON.stringify({
+          name,
+          email,
+          phoneNumber,
+          teacher: { name: teacher.name, surname: teacher.surname },
+        })
+      );
     } else {
       console.log("Something went wrong");
     }
   };
 
   return (
-    <div>
-      <div className="text">
-        <h2>Book trial lesson</h2>
-        <p>
-          Our experienced tutor will assess your current language level, discuss
-          your learning goals, and tailor the lesson to your specific needs.
-        </p>
-        <div>
-          <img src={teacher.avatar_url} className={s.img} />
+    <div className={s.bookingForm}>
+      <div>
+        <div className="text">
+          <h2 className={s.title}>Book trial lesson</h2>
           <p>
+            Our experienced tutor will assess your current language level,
+            discuss your learning goals, and tailor the lesson to your specific
+            needs.
+          </p>
+        </div>
+        <div className={s.teacherInfo}>
+          <img src={teacher.avatar_url} className={s.img} />
+          <p className={s.teacher}>Your teacher</p>
+          <p className={s.name}>
             {teacher.name} {teacher.surname}
           </p>
         </div>
-        <p>What is your main reason for learning English?</p>
-        <ul>
+        <p className={s.reason}>
+          What is your main reason for learning English?
+        </p>
+        <ul className={s.radioList}>
           <li>
-            <label htmlFor="span">
-              <input type="radio" name="reason" {...register("reason")} />
+            <label>
+              <input type="radio" name="reason" />
               Career and business
             </label>
           </li>
           <li>
-            <label htmlFor="span">
-              <input type="radio" name="reason" {...register("reason")} />
+            <label>
+              <input type="radio" name="reason" />
               Lesson for kids
             </label>
           </li>
           <li>
-            <label htmlFor="span">
-              <input type="radio" name="reason" {...register("reason")} />
+            <label>
+              <input type="radio" name="reason" />
               Living abroad
             </label>
           </li>
           <li>
-            <label htmlFor="span">
-              <input type="radio" name="reason" {...register("reason")} />
+            <label>
+              <input type="radio" name="reason" />
               Exams and coursework
             </label>
           </li>
           <li>
-            <label htmlFor="span">
-              <input type="radio" name="reason" {...register("reason")} />
+            <label>
+              <input type="radio" name="reason" />
               Culture, travel or hobby
             </label>
           </li>

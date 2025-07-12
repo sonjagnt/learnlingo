@@ -3,7 +3,7 @@ h2 {
   font-size: 40px;
   line-height: 120%;
   letter-spacing: -0.02em;
-  margin-bottom: 40px;
+  margin-bottom: 20px;
 }
 
 .text {
@@ -20,7 +20,8 @@ form {
 }
 
 form input {
-  border: 1px solid rgba(18, 20, 23, 01);
+  outline: none;
+  border: 1px solid rgba(18, 20, 23, 1);
   border-radius: 12px;
   padding-left: 18px;
   padding-bottom: 16px;

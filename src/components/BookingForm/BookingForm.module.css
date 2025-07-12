@@ -1,4 +1,48 @@
+.bookingForm {
+  max-height: 500px;
+  overflow: scroll;
+  scrollbar-width: none;
+}
+
+.teacherInfo {
+  display: grid;
+  grid-template-areas:
+    "i t"
+    "i n";
+  grid-template-columns: 44px auto;
+  gap: 4px 14px;
+  align-items: center;
+  margin-bottom: 40px;
+}
+
+.teacher {
+  color: var(--dark-gray);
+  font-size: 12px;
+  grid-area: t;
+  font-weight: 500;
+}
+
+.name {
+  font-weight: 500;
+  grid-area: n;
+}
+
 .img {
+  border-radius: 50%;
+  grid-area: i;
   width: 44px;
   height: auto;
+}
+
+.reason {
+  font-weight: 500;
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+.radioList {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 40px;
 }
