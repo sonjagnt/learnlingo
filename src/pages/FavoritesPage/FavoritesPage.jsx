@@ -2,31 +2,33 @@ import { useEffect } from "react";
 import s from "./FavoritesPage.module.css";
 import { getAuth } from "firebase/auth";
 import { useDispatch, useSelector } from "react-redux";
-import { selectFavs, selectFavsIsLoading } from "../../redux/favorites/selectors";
+import {
+  selectFavs,
+  selectFavsIsLoading,
+} from "../../redux/favorites/selectors";
 import { loadFavs } from "../../redux/favorites/slice";
 import { DotLoader } from "react-spinners";
 import { FaRegHeart } from "react-icons/fa";
 import { IoBookOutline } from "react-icons/io5";
 import { TiStarFullOutline } from "react-icons/ti";
 
-
 export const FavoritesPage = () => {
-const user = getAuth().currentUser;
-const dispatch = useDispatch();
-const favs = useSelector(selectFavs);
-const isLoading = useSelector(selectFavsIsLoading);
+  const user = getAuth().currentUser;
+  const dispatch = useDispatch();
+  const favs = useSelector(selectFavs);
+  const isLoading = useSelector(selectFavsIsLoading);
 
-useEffect(() => {
-  if (user) {
-    dispatch(loadFavs({userId: user.uid}));
-  }
-  return;
-}, [dispatch])
+  useEffect(() => {
+    if (user) {
+      dispatch(loadFavs({ userId: user.uid }));
+    }
+    return;
+  }, [dispatch]);
 
   return (
-    <section  className={s.listContainer}>
-          <ul className={s.favList}>
-          <DotLoader color="var(--yellow)" loading={isLoading}/>
+    <section className={s.listContainer}>
+      <ul className={s.favList}>
+        <DotLoader color="var(--yellow)" loading={isLoading} />
         {favs.map((fav) => (
           <li key={fav.id} className={s.card}>
             <div className={s.cardHeader}>
@@ -55,8 +57,7 @@ useEffect(() => {
               </h3>
               <ul>
                 <li>
-                  <span className={s.grayText}>Speaks:</span>{" "}
-                  {fav.languages}
+                  <span className={s.grayText}>Speaks:</span> {fav.languages}
                 </li>
                 <li>
                   <span className={s.grayText}>Lessons info:</span>{" "}
@@ -81,12 +82,6 @@ useEffect(() => {
           </li>
         ))}
       </ul>
-
- 
-
-  <button type="button" className={s.btn}>
-    Load more
-  </button>
     </section>
   );
 };

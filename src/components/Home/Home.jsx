@@ -1,9 +1,9 @@
 import { Link } from "react-router";
 import img from "../../assets/block.png";
+import box from "../../assets/container.png";
 import s from "./Home.module.css";
 
 export const Home = () => {
-
   return (
     <section className={s.container}>
       <div className={s.main}>
@@ -16,7 +16,7 @@ export const Home = () => {
           Elevate your language proficiency to new heights by connecting with
           highly qualified and experienced tutors.
         </p>
-        <Link className={s.btn}  to={'/teachers'}>
+        <Link className={s.btn} to={"/teachers"}>
           Get started
         </Link>
       </div>
@@ -24,12 +24,14 @@ export const Home = () => {
       <img src={img} className={s.heroImg} />
 
       <ul className={s.statList}>
+        {" "}
+        <img src={box} className={s.box} />
         <li>
-          <p className={s.statNum}>32000+</p>
+          <p className={s.statNum}>32,000+</p>
           <p className={s.statDescr}>Experienced tutors</p>
         </li>
         <li>
-          <p className={s.statNum}>300000+</p>
+          <p className={s.statNum}>300,000+</p>
           <p className={s.statDescr}>5-star tutor reviews</p>
         </li>
         <li>

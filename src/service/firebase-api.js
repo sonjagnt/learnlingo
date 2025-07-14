@@ -3,10 +3,8 @@ import {
   ref,
   set,
   limitToFirst,
- orderByKey,
-  startAfter, 
+  orderByKey,
   query,
-
 } from "firebase/database";
 import { database } from "../utils/firebase";
 import { getAuth } from "firebase/auth";
@@ -19,7 +17,9 @@ export const fetchTeachers = async (
   const { language, level, price } = filters;
   const teachersRef = ref(database, "/teachers");
 
-  const snapshot = await get(query(teachersRef, orderByKey(), limitToFirst(1000)));
+  const snapshot = await get(
+    query(teachersRef, orderByKey(), limitToFirst(1000))
+  );
 
   if (!snapshot.exists()) {
     return { teachers: [], lastKey: null, hasMore: false };
@@ -31,10 +31,11 @@ export const fetchTeachers = async (
   }));
 
   list = list.filter((teacher) => {
-    const normalize = str => str.toLowerCase().replace(/\s+/g, '');
+    const normalize = (str) => str.toLowerCase().replace(/\s+/g, "");
 
     const languageMatch = language
-      ? Array.isArray(teacher.languages) && teacher.languages.map(l => normalize(l)).includes(normalize(language))
+      ? Array.isArray(teacher.languages) &&
+        teacher.languages.map((l) => normalize(l)).includes(normalize(language))
       : true;
 
     const levelMatch = level
@@ -66,32 +67,31 @@ export const fetchTeachers = async (
   };
 };
 
-export const addToFavorites = async (userId, itemId, itemDetails) => {
-  const user = getAuth().currentUser;
-  if (!user) {
-    throw new Error("User is not authenticated");
-  }
-  const favoritesRef = ref(database, `users/${userId}/favorites/${itemId}`);
-  try {
-    await set(favoritesRef, itemDetails);
-  } catch (error) {
-    console.error( error);
-  }
-}
+// export const addToFavorites = async (userId, itemId, itemDetails) => {
+//   const user = getAuth().currentUser;
+//   if (!user) {
+//     throw new Error("User is not authenticated");
+//   }
+//   const favoritesRef = ref(database, `users/${userId}/favorites/${itemId}`);
+//   try {
+//     await set(favoritesRef, itemDetails);
+//   } catch (error) {
+//     console.error(error);
+//   }
+// };
 
-export const removeFromFavorites = async (userId, itemId) => {
-  const user = getAuth().currentUser;
-  if (!user) {
-    throw new Error("User is not authenticated");
-  }
-  try {
-    await set(ref(database, `users/${userId}/favorites/${itemId}`), null);
-    console.log('teacher removed from favorites');
-  }
-  catch(e) {
-    e.message
-  }
-}
+// export const removeFromFavorites = async (userId, itemId) => {
+//   const user = getAuth().currentUser;
+//   if (!user) {
+//     throw new Error("User is not authenticated");
+//   }
+//   try {
+//     await set(ref(database, `users/${userId}/favorites/${itemId}`), null);
+//     console.log("teacher removed from favorites");
+//   } catch (e) {
+//     e.message;
+//   }
+// };
 
 export const fetchFavorites = async (userId) => {
   const favoritesRef = ref(database, `users/${userId}/favorites`);
@@ -106,8 +106,37 @@ export const fetchFavorites = async (userId) => {
         id,
         ...details,
       }));
-      return response;
+
+    return response;
   } else {
     return [];
+  }
+};
+
+export const toggleFavorite = async (userId, itemId, itemDetails) => {
+  const user = getAuth().currentUser;
+  if (!user) {
+    throw new Error("User is not authenticated");
+  }
+
+  const favoriteRef = ref(database, `users/${userId}/favorites/${itemId}`);
+
+  try {
+    const snapshot = await get(favoriteRef);
+
+    if (snapshot.exists()) {
+      // Уже есть — удаляем
+      await set(favoriteRef, null);
+      console.log("Removed from favorites");
+      return { added: false };
+    } else {
+      // Нет — добавляем
+      await set(favoriteRef, itemDetails);
+      console.log("Added to favorites");
+      return { added: true };
+    }
+  } catch (error) {
+    console.error(error);
+    throw error;
   }
 };
