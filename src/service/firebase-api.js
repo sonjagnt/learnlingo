@@ -106,8 +106,9 @@ export const fetchFavorites = async (userId) => {
         id,
         ...details,
       }));
+    const idList = response.map((t) => t.id);
 
-    return response;
+    return idList;
   } else {
     return [];
   }

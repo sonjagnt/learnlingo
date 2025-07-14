@@ -24,6 +24,11 @@ import { FilterBar } from "../FilterBar/FirlterBar";
 import { TeacherDetails } from "../TeacherDetails/TeacherDetails";
 import clsx from "clsx";
 import { selectFavs } from "../../redux/favorites/selectors";
+import {
+  addFavorite,
+  loadFavs,
+  removeFavorite,
+} from "../../redux/favorites/slice";
 
 export const TeachersList = () => {
   const [detailsId, setDetailsId] = useState(null);
@@ -72,7 +77,12 @@ export const TeachersList = () => {
     if (!teacher) return;
 
     try {
-      await toggleFavorite(user.uid, teacher.id, teacher);
+      const result = await toggleFavorite(user.uid, teacher.id, teacher);
+      if (result.added) {
+        dispatch(addFavorite(teacherId));
+      } else {
+        dispatch(removeFavorite(teacherId));
+      }
     } catch (e) {
       console.log(e.message);
       toast("Failed to add to favorites. Please try again.", {
@@ -84,7 +94,9 @@ export const TeachersList = () => {
 
   useEffect(() => {
     dispatch(clearTeachers());
-
+    if (user) {
+      dispatch(loadFavs({ userId: user.uid }));
+    }
     dispatch(
       loadTeachers({
         lastKey: null,
@@ -92,7 +104,7 @@ export const TeachersList = () => {
         filters: { language: languages, level: levels, price: price },
       })
     );
-  }, [dispatch, languages, levels, price]);
+  }, [dispatch, user, languages, levels, price]);
 
   return (
     <section className={s.listContainer}>
@@ -116,8 +128,11 @@ export const TeachersList = () => {
                 <li>Price/1 hour: {teacher.price_per_hour}$</li>
               </ul>
               <button type="button">
-                <FaRegHeart size={26} onClick={() => toggleFav(teacher.id)} />
-                {favs.includes(teacher.id) ? <FaHeart /> : <FaRegHeart />}
+                {favs.includes(teacher.id) ? (
+                  <FaHeart size={26} onClick={() => toggleFav(teacher.id)} />
+                ) : (
+                  <FaRegHeart size={26} onClick={() => toggleFav(teacher.id)} />
+                )}
               </button>
               <Toaster />
             </div>

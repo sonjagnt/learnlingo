@@ -16,6 +16,7 @@ export const FavoritesPage = () => {
   const user = getAuth().currentUser;
   const dispatch = useDispatch();
   const favs = useSelector(selectFavs);
+
   const isLoading = useSelector(selectFavsIsLoading);
 
   useEffect(() => {

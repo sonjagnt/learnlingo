@@ -47,6 +47,14 @@ const favoritesSlice = createSlice({
       })
       .addCase(loadFavs.rejected, handleRejected);
   },
+  reducers: {
+    addFavorite: (state, action) => {
+      if (!state.list.includes(action.payload)) state.list.push(action.payload);
+    },
+    removeFavorite: (state, action) => {
+      state.list = state.list.filter((id) => id != action.payload);
+    },
+  },
 });
-
+export const { addFavorite, removeFavorite } = favoritesSlice.actions;
 export default favoritesSlice.reducer;
