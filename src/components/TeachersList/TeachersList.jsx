@@ -1,80 +1,104 @@
-import { useState, useEffect } from "react";
-import { fetchTeachers } from "../../service/firebase-api";
+import { useEffect, useState } from "react";
+import { addToFavorites } from "../../service/firebase-api";
 import s from "./TeachersList.module.css";
 import { IoBookOutline } from "react-icons/io5";
 import { FaRegHeart } from "react-icons/fa";
 import { TiStarFullOutline } from "react-icons/ti";
 import toast, { Toaster } from "react-hot-toast";
 import { useAuth } from "../../contexts/auth-context";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  selectIsEnd,
+  selectIsLoading,
+  selectLastKey,
+  selectTeachers,
+} from "../../redux/teachers/selectors";
+import {
+  selectLanguages,
+  selectLevels,
+  selectPrice,
+} from "../../redux/filters/selectors";
+import { clearTeachers, loadTeachers } from "../../redux/teachers/slice";
+import { DotLoader } from "react-spinners";
+import { FilterBar } from "../FilterBar/FirlterBar";
+import { TeacherDetails } from "../TeacherDetails/TeacherDetails";
+import clsx from "clsx";
 
 export const TeachersList = () => {
-  const [teachers, setTeachers] = useState([]);
-  const [currentCursor, setCursor] = useState(null);
-  const [isEnd, setIsEnd] = useState(false);
+  const [detailsId, setDetailsId] = useState(null);
+  const [activeLevels, setActiveLevels] = useState({});
+
+  const languages = useSelector(selectLanguages);
+  const levels = useSelector(selectLevels);
+  const price = useSelector(selectPrice);
+
+  const teachers = useSelector(selectTeachers);
+  const lastKey = useSelector(selectLastKey);
+  const isEnd = useSelector(selectIsEnd);
+  const isLoading = useSelector(selectIsLoading);
+  const dispatch = useDispatch();
 
   const { user } = useAuth();
 
-  async function handleLoadMore() {
-    const pageSize = 4;
-    const cards = await fetchTeachers(currentCursor, pageSize + 1);
-
-    if (cards.length > 0) {
-      let newCards = [...cards];
-
-      if (currentCursor) {
-        newCards.shift();
-      }
-
-      if (newCards.length > 0) {
-        setTeachers((prev) => [...prev, ...newCards]);
-        setCursor(newCards[newCards.length - 1].id);
-
-        if (newCards.length < 4) {
-          setIsEnd(true);
-          toast("Seems like you've scrolled to the very end!", {
-            icon: "😞",
-            position: "bottom-center",
-          });
-        }
-      } else {
-        setIsEnd(true);
-        toast("Seems like you've scrolled to the very end!", {
-          icon: "😞",
-          position: "bottom-center",
-        });
-      }
-    } else {
-      setIsEnd(true);
-      toast("Seems like you've scrolled to the very end!", {
+  const handleLoadMore = () => {
+    if (!isEnd && !isLoading) {
+      dispatch(
+        loadTeachers({
+          lastKey,
+          limit: 4,
+          filters: { language: languages, level: levels, price: price },
+        })
+      );
+    }
+    if (isEnd) {
+      toast("Seems like you've scrolled through all the teachers!", {
         icon: "😞",
-        position: "bottom-center",
       });
     }
-  }
-
-  const userNotify = () => {
-    if (!user) {
-      toast("Please log in to access favorites!", {
-        icon: "🙏",
-        position: "bottom-center",
-      });
-    }
-    return;
   };
+
+  const addFavorite = async (teacherId) => {
+    if (!user) {
+      toast("Please log in to use this feature!", {
+        icon: "🙏",
+      });
+      return;
+    }
+
+    const teacher = teachers.find((teacher) => teacher.id === teacherId);
+    if (!teacher) return;
+
+    try {
+      await addToFavorites(user.uid, teacher.id, teacher);
+      toast("Teacher added to favorites!", {
+        icon: "❤️",
+        position: "bottom-center",
+      });
+    } catch (e) {
+      console.log(e.message);
+      toast("Failed to add to favorites. Please try again.", {
+        icon: "❌",
+      });
+    }
+  };
+
   useEffect(() => {
-    const getTeachers = async () => {
-      const list = await fetchTeachers();
-      setTeachers(list);
-      if (list.length > 0) {
-        setCursor(list[list.length - 1].id);
-      }
-    };
-    getTeachers();
-  }, []);
+    dispatch(clearTeachers());
+
+    dispatch(
+      loadTeachers({
+        lastKey: null,
+        limit: 4,
+        filters: { language: languages, level: levels, price: price },
+      })
+    );
+  }, [dispatch, languages, levels, price]);
 
   return (
-    <div className={s.listContainer}>
+    <section className={s.listContainer}>
+      <FilterBar />
       <ul className={s.teacherList}>
+        <DotLoader color="var(--yellow)" loading={isLoading} />
         {teachers.map((teacher) => (
           <li key={teacher.id} className={s.card}>
             <div className={s.cardHeader}>
@@ -89,10 +113,10 @@ export const TeachersList = () => {
                   <TiStarFullOutline fill="var(--yellow)" />
                   Rating: {teacher.rating}
                 </li>
-                <li>Price/1 hour: {teacher.price_per_hour}</li>
+                <li>Price/1 hour: {teacher.price_per_hour}$</li>
               </ul>
               <button type="button">
-                <FaRegHeart size={26} onClick={userNotify} />
+                <FaRegHeart size={26} onClick={() => addFavorite(teacher.id)} />
               </button>
               <Toaster />
             </div>
@@ -116,27 +140,46 @@ export const TeachersList = () => {
                   {teacher.conditions}
                 </li>
               </ul>
-              <button type="button" className={s.readMoreBtn}>
-                Read more
-              </button>
+              {detailsId === teacher.id ? (
+                <TeacherDetails teacher={teacher} />
+              ) : (
+                <button
+                  type="button"
+                  className={s.readMoreBtn}
+                  onClick={() => setDetailsId(teacher.id)}
+                >
+                  Read more
+                </button>
+              )}
             </div>
             <ul className={s.lvls}>
               {teacher.levels.map((level) => (
-                <li className={s.lvl} key={level}>
-                  {level}
+                <li
+                  key={level}
+                  className={clsx(s.lvl, {
+                    [s.active]: activeLevels[teacher.id] === level,
+                  })}
+                  onClick={() =>
+                    setActiveLevels((prev) => ({
+                      ...prev,
+                      [teacher.id]: level,
+                    }))
+                  }
+                >
+                  #{level}
                 </li>
               ))}
             </ul>
           </li>
         ))}
       </ul>
-      {isEnd ? (
-        <Toaster />
-      ) : (
+      {isEnd && <Toaster />}
+
+      {!isEnd && !isLoading && (
         <button type="button" onClick={handleLoadMore} className={s.btn}>
           Load more
         </button>
       )}
-    </div>
+    </section>
   );
 };

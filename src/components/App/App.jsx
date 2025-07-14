@@ -8,6 +8,8 @@ import { useState } from "react";
 import { LoginForm } from "../LoginForm/LoginForm";
 import { RegistrationForm } from "../RegistrationForm/RegistrationForm";
 import { ModalWindow } from "../../ui/ModalWindow";
+import { FavoritesPage } from "../../pages/FavoritesPage/FavoritesPage";
+import PrivateRoute from "../PrivateRoute";
 
 function App() {
   const [modalIsOpen, setModalIsOpen] = useState(false);
@@ -38,6 +40,10 @@ function App() {
         <Route path="/teachers" element={<TeachersPage />} />
         <Route path="/register" element={<RegistrationPage />} />
         <Route path="/login" element={<LoginPage />} />
+        
+          <Route path="/favorites" element={<PrivateRoute><FavoritesPage/></PrivateRoute>} />
+        
+
       </Routes>
     </>
   );

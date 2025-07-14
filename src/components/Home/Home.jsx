@@ -1,7 +1,9 @@
+import { Link } from "react-router";
 import img from "../../assets/block.png";
 import s from "./Home.module.css";
 
 export const Home = () => {
+
   return (
     <section className={s.container}>
       <div className={s.main}>
@@ -14,9 +16,9 @@ export const Home = () => {
           Elevate your language proficiency to new heights by connecting with
           highly qualified and experienced tutors.
         </p>
-        <button type="button" className={s.btn}>
+        <Link className={s.btn}  to={'/teachers'}>
           Get started
-        </button>
+        </Link>
       </div>
 
       <img src={img} className={s.heroImg} />
