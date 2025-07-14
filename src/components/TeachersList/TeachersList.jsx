@@ -54,7 +54,7 @@ export const TeachersList = () => {
 
   const userNotify = () => {
     if (!user) {
-      toast("Please log in to use this", {
+      toast("Please log in to access favorites!", {
         icon: "🙏",
         position: "bottom-center",
       });

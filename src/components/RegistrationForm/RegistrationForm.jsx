@@ -3,7 +3,7 @@ import { auth } from "../../utils/firebase";
 import { useForm } from "react-hook-form";
 import * as Yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
-import("../../ui/forms.css");
+import "../../ui/forms.css";
 
 const validationSchema = Yup.object().shape({
   name: Yup.string()
