@@ -79,9 +79,9 @@ export const TeachersList = () => {
     try {
       const result = await toggleFavorite(user.uid, teacher.id, teacher);
       if (result.added) {
-        dispatch(addFavorite(teacherId));
+        dispatch(addFavorite(teacher));
       } else {
-        dispatch(removeFavorite(teacherId));
+        dispatch(removeFavorite(teacher));
       }
     } catch (e) {
       console.log(e.message);
@@ -128,7 +128,7 @@ export const TeachersList = () => {
                 <li>Price/1 hour: {teacher.price_per_hour}$</li>
               </ul>
               <button type="button">
-                {favs.includes(teacher.id) ? (
+                {favs.find((fav) => fav.id === teacher.id) ? (
                   <FaHeart
                     size={26}
                     onClick={() => toggleFav(teacher.id)}
@@ -138,7 +138,6 @@ export const TeachersList = () => {
                   <FaRegHeart size={26} onClick={() => toggleFav(teacher.id)} />
                 )}
               </button>
-              <Toaster />
             </div>
 
             <img src={teacher.avatar_url} className={s.avatar} />
@@ -193,7 +192,6 @@ export const TeachersList = () => {
           </li>
         ))}
       </ul>
-      {isEnd && <Toaster />}
 
       {!isEnd && !isLoading && (
         <button type="button" onClick={handleLoadMore} className={s.btn}>

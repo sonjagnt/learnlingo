@@ -10,6 +10,7 @@ import { RegistrationForm } from "../RegistrationForm/RegistrationForm";
 import { ModalWindow } from "../../ui/ModalWindow";
 import { FavoritesPage } from "../../pages/FavoritesPage/FavoritesPage";
 import PrivateRoute from "../PrivateRoute";
+import { Toaster } from "react-hot-toast";
 
 function App() {
   const [modalIsOpen, setModalIsOpen] = useState(false);
@@ -35,15 +36,21 @@ function App() {
       <ModalWindow isOpen={modalIsOpen} onClose={closeModal}>
         {modalType}
       </ModalWindow>
+      <Toaster />
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/teachers" element={<TeachersPage />} />
         <Route path="/register" element={<RegistrationPage />} />
         <Route path="/login" element={<LoginPage />} />
-        
-          <Route path="/favorites" element={<PrivateRoute><FavoritesPage/></PrivateRoute>} />
-        
 
+        <Route
+          path="/favorites"
+          element={
+            <PrivateRoute>
+              <FavoritesPage />
+            </PrivateRoute>
+          }
+        />
       </Routes>
     </>
   );

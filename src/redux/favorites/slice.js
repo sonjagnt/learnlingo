@@ -52,7 +52,7 @@ const favoritesSlice = createSlice({
       if (!state.list.includes(action.payload)) state.list.push(action.payload);
     },
     removeFavorite: (state, action) => {
-      state.list = state.list.filter((id) => id != action.payload);
+      state.list = state.list.filter((f) => f.id != action.payload);
     },
   },
 });

@@ -5,6 +5,7 @@ import {
   limitToFirst,
   orderByKey,
   query,
+  remove,
 } from "firebase/database";
 import { database } from "../utils/firebase";
 import { getAuth } from "firebase/auth";
@@ -106,38 +107,34 @@ export const fetchFavorites = async (userId) => {
         id,
         ...details,
       }));
-    const idList = response.map((t) => t.id);
+    console.log(response);
 
-    return idList;
+    return response;
   } else {
     return [];
   }
 };
 
 export const toggleFavorite = async (userId, itemId, itemDetails) => {
-  const user = getAuth().currentUser;
-  if (!user) {
-    throw new Error("User is not authenticated");
-  }
-
   const favoriteRef = ref(database, `users/${userId}/favorites/${itemId}`);
 
   try {
     const snapshot = await get(favoriteRef);
 
     if (snapshot.exists()) {
-      // Уже есть — удаляем
       await set(favoriteRef, null);
-      console.log("Removed from favorites");
       return { added: false };
     } else {
-      // Нет — добавляем
       await set(favoriteRef, itemDetails);
-      console.log("Added to favorites");
       return { added: true };
     }
   } catch (error) {
     console.error(error);
     throw error;
   }
+};
+
+export const removeFavoriteDB = async (userId, itemId) => {
+  const favoriteRef = ref(database, `users/${userId}/favorites/${itemId}`);
+  await remove(favoriteRef);
 };
