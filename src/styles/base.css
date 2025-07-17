@@ -58,3 +58,11 @@ textarea {
 section {
   padding: 32px 64px;
 }
+
+.react-select-level {
+  width: 200px;
+}
+
+.react-select-language {
+  width: 222px;
+}

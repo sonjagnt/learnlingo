@@ -3,7 +3,7 @@ import * as Yup from "yup";
 import { auth } from "../../utils/firebase";
 import { useForm } from "react-hook-form";
 import { signInWithEmailAndPassword } from "firebase/auth";
-import "../../ui/forms.css";
+import "../../styles/forms.css";
 
 const schema = Yup.object().shape({
   email: Yup.string().required("Email is required"),

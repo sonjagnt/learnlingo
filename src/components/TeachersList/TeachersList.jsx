@@ -20,7 +20,7 @@ import {
 } from "../../redux/filters/selectors";
 import { clearTeachers, loadTeachers } from "../../redux/teachers/slice";
 import { DotLoader } from "react-spinners";
-import { FilterBar } from "../FilterBar/FirlterBar";
+import { FilterBar } from "../FilterBar/FilterBar";
 import { TeacherDetails } from "../TeacherDetails/TeacherDetails";
 import clsx from "clsx";
 import { selectFavs } from "../../redux/favorites/selectors";
@@ -129,7 +129,11 @@ export const TeachersList = () => {
               </ul>
               <button type="button">
                 {favs.includes(teacher.id) ? (
-                  <FaHeart size={26} onClick={() => toggleFav(teacher.id)} />
+                  <FaHeart
+                    size={26}
+                    onClick={() => toggleFav(teacher.id)}
+                    fill={"var(--yellow)"}
+                  />
                 ) : (
                   <FaRegHeart size={26} onClick={() => toggleFav(teacher.id)} />
                 )}
