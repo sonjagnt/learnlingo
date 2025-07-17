@@ -39,7 +39,7 @@ export const TeacherDetails = ({ teacher }) => {
           <p className={s.comment}>{r.comment}</p>
         </div>
       ))}
-      <button type="button" onClick={handleOpen}>
+      <button type="button" onClick={handleOpen} className={s.btn}>
         Book trial lesson
       </button>
       <ModalWindow isOpen={isOpen} onClose={handleClose}>

@@ -40,3 +40,15 @@
   align-items: center;
   gap: 2px;
 }
+
+.btn {
+  font-weight: 700;
+  font-size: 18px;
+  line-height: 156%;
+  color: var(--main);
+  border-radius: 12px;
+  padding: 16px 48px;
+  width: 232px;
+  height: 60px;
+  background-color: var(--yellow);
+}

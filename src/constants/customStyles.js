@@ -40,6 +40,7 @@ export const customStyles = {
     ...base,
     fontWeight: 500,
     color: isSelected ? "var(--main)" : "rgba(18, 20, 23, 0.2)",
+    cursor: "pointer",
   }),
 
   menuList: (base) => ({

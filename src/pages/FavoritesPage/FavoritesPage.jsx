@@ -1,6 +1,5 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import s from "./FavoritesPage.module.css";
-import { getAuth } from "firebase/auth";
 import { useDispatch, useSelector } from "react-redux";
 import {
   selectFavs,
@@ -13,8 +12,13 @@ import { IoBookOutline } from "react-icons/io5";
 import { TiStarFullOutline } from "react-icons/ti";
 import { removeFavoriteDB } from "../../service/firebase-api";
 import { useAuth } from "../../contexts/auth-context";
+import { TeacherDetails } from "../../components/TeacherDetails/TeacherDetails";
+import clsx from "clsx";
 
 export const FavoritesPage = () => {
+  const [detailsId, setDetailsId] = useState(null);
+  const [activeLevels, setActiveLevels] = useState({});
+
   const { user } = useAuth();
   const dispatch = useDispatch();
   const favs = useSelector(selectFavs) || [];
@@ -26,7 +30,7 @@ export const FavoritesPage = () => {
       dispatch(loadFavs({ userId: user.uid }));
     }
     return;
-  }, [dispatch, user, favs]);
+  }, [dispatch, user]);
 
   const handleDelete = async (id) => {
     try {
@@ -42,7 +46,7 @@ export const FavoritesPage = () => {
     <section className={s.listContainer}>
       {favs.length === 0 && <p>There is no favorites yet!</p>}
       <ul className={s.favList}>
-        {isLoading && <DotLoader loading={true} />}
+        {isLoading && <DotLoader loading={true} fill="var(--yellow)" />}
         {favs.map((fav) => (
           <li key={fav.id} className={s.card}>
             <div className={s.cardHeader}>
@@ -57,7 +61,10 @@ export const FavoritesPage = () => {
                   <TiStarFullOutline fill="var(--yellow)" />
                   Rating: {fav.rating}
                 </li>
-                <li>Price/1 hour: {fav.price_per_hour}</li>
+                <li>
+                  Price/1 hour:{" "}
+                  <span className={s.price}>{fav.price_per_hour}$</span>
+                </li>
               </ul>
               <button type="button">
                 <FaHeart
@@ -75,7 +82,8 @@ export const FavoritesPage = () => {
               </h3>
               <ul>
                 <li>
-                  <span className={s.grayText}>Speaks:</span> {fav.languages}
+                  <span className={s.grayText}>Speaks:</span>{" "}
+                  {fav.languages.join(", ")}
                 </li>
                 <li>
                   <span className={s.grayText}>Lessons info:</span>{" "}
@@ -86,14 +94,33 @@ export const FavoritesPage = () => {
                   {fav.conditions}
                 </li>
               </ul>
-              <button type="button" className={s.readMoreBtn}>
-                Read more
-              </button>
+              {detailsId === fav.id ? (
+                <TeacherDetails teacher={fav} />
+              ) : (
+                <button
+                  type="button"
+                  className={s.readMoreBtn}
+                  onClick={() => setDetailsId(fav.id)}
+                >
+                  Read more
+                </button>
+              )}
             </div>
             <ul className={s.lvls}>
               {fav.levels.map((level) => (
-                <li className={s.lvl} key={level}>
-                  {level}
+                <li
+                  key={level}
+                  className={clsx(s.lvl, {
+                    [s.active]: activeLevels[fav.id] === level,
+                  })}
+                  onClick={() =>
+                    setActiveLevels((prev) => ({
+                      ...prev,
+                      [fav.id]: level,
+                    }))
+                  }
+                >
+                  #{level}
                 </li>
               ))}
             </ul>

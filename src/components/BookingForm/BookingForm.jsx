@@ -8,13 +8,13 @@ import toast from "react-hot-toast";
 export const BookingForm = ({ teacher }) => {
   const validationSchema = Yup.object().shape({
     name: Yup.string()
-      .min(3, "Too short")
+      .min(3, "Full name must be at least 3 characters long")
       .max(50, "Too long")
       .required("Name is required"),
     email: Yup.string()
       .email("Must be a valid email")
-      .min(3, "Too short")
-      .max(50, "Too long")
+      .min(3, "Email is too short")
+      .max(50, "Email is too long")
       .required("Email is required"),
     phoneNumber: Yup.string()
       .min(5, "Phone number has to be at least 5 characters long")
@@ -22,7 +22,7 @@ export const BookingForm = ({ teacher }) => {
       .required("Phone number is required"),
   });
 
-  const user = useAuth();
+  const { user } = useAuth();
   const {
     register,
     handleSubmit,
@@ -111,7 +111,7 @@ export const BookingForm = ({ teacher }) => {
           <input {...register("email")} placeholder="Email" />
           <span>{errors.email?.message}</span>
           <input {...register("phoneNumber")} placeholder="Phone number" />
-          <span>{errors.password?.message}</span>
+          <span>{errors.phoneNumber?.message}</span>
           <button type="submit">Book</button>
         </form>
       </div>

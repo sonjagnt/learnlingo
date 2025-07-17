@@ -54,7 +54,9 @@
   align-items: center;
   gap: 32px;
 }
-
+.price {
+  color: #38cd3e;
+}
 .avatar {
   grid-area: i;
   width: 96px;

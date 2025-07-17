@@ -125,7 +125,10 @@ export const TeachersList = () => {
                   <TiStarFullOutline fill="var(--yellow)" />
                   Rating: {teacher.rating}
                 </li>
-                <li>Price/1 hour: {teacher.price_per_hour}$</li>
+                <li>
+                  Price/1 hour:{" "}
+                  <span className={s.price}>{teacher.price_per_hour}$</span>
+                </li>
               </ul>
               <button type="button">
                 {favs.find((fav) => fav.id === teacher.id) ? (
@@ -148,7 +151,7 @@ export const TeachersList = () => {
               <ul>
                 <li>
                   <span className={s.grayText}>Speaks:</span>{" "}
-                  {teacher.languages}
+                  {teacher.languages.join(", ")}
                 </li>
                 <li>
                   <span className={s.grayText}>Lessons info:</span>{" "}
