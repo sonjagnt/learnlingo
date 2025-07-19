@@ -29,27 +29,31 @@ export const BookingForm = ({ teacher, closeModal }) => {
     formState: { errors },
   } = useForm({ resolver: yupResolver(validationSchema) });
 
-  const onSubmit = ({ name, email, phoneNumber }) => {
-    if (user) {
-      toast(
-        `Thank you, ${name}! Your trial lesson with ${teacher.name} has been booked successfully!`,
-        {
-          icon: "🎉",
-        }
-      );
+  const onSubmit = async ({ name, email, phoneNumber }) => {
+    try {
+      if (user) {
+        toast(
+          `Thank you, ${name}! Your trial lesson with ${teacher.name} has been booked successfully!`,
+          {
+            icon: "🎉",
+          }
+        );
 
-      localStorage.setItem(
-        "bookingDetails",
-        JSON.stringify({
-          name,
-          email,
-          phoneNumber,
-          teacher: { name: teacher.name, surname: teacher.surname },
-        })
-      );
-      closeModal();
-    } else {
-      console.error("error");
+        localStorage.setItem(
+          "bookingDetails",
+          JSON.stringify({
+            name,
+            email,
+            phoneNumber,
+            teacher: { name: teacher.name, surname: teacher.surname },
+          })
+        );
+        closeModal();
+      } else {
+        throw new Error("User not authenticated");
+      }
+    } catch (error) {
+      console.error("Booking Error:", error);
     }
   };
 
