@@ -8,7 +8,6 @@ import {
   remove,
 } from "firebase/database";
 import { database } from "../utils/firebase";
-import { getAuth } from "firebase/auth";
 
 export const fetchTeachers = async (
   startFrom = null,
@@ -67,32 +66,6 @@ export const fetchTeachers = async (
     hasMore,
   };
 };
-
-// export const addToFavorites = async (userId, itemId, itemDetails) => {
-//   const user = getAuth().currentUser;
-//   if (!user) {
-//     throw new Error("User is not authenticated");
-//   }
-//   const favoritesRef = ref(database, `users/${userId}/favorites/${itemId}`);
-//   try {
-//     await set(favoritesRef, itemDetails);
-//   } catch (error) {
-//     console.error(error);
-//   }
-// };
-
-// export const removeFromFavorites = async (userId, itemId) => {
-//   const user = getAuth().currentUser;
-//   if (!user) {
-//     throw new Error("User is not authenticated");
-//   }
-//   try {
-//     await set(ref(database, `users/${userId}/favorites/${itemId}`), null);
-//     console.log("teacher removed from favorites");
-//   } catch (e) {
-//     e.message;
-//   }
-// };
 
 export const fetchFavorites = async (userId) => {
   const favoritesRef = ref(database, `users/${userId}/favorites`);

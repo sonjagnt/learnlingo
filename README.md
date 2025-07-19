@@ -42,6 +42,7 @@ npm run dev
 - Add "reset filters" button
 - Migrate all logic to FireStore
 - Implement sending an email verification to the users who has booked a trial session
+- Add show/hide password button
 - Implement creating an account using email and phone number from booking form, if user hasn't created an account yet
 - Add animations and interface color-changing feature
 

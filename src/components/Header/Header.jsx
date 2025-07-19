@@ -8,9 +8,7 @@ import { useAuth } from "../../contexts/auth-context";
 export const Header = ({ onLogin, onRegister }) => {
   const { user } = useAuth();
   const handleLogOut = () => {
-    auth.signOut().then(() => {
-      console.log("Signed out");
-    });
+    auth.signOut();
   };
 
   return (

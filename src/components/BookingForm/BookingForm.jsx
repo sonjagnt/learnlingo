@@ -1,7 +1,6 @@
 import { useForm } from "react-hook-form";
 import * as Yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useAuth } from "../../contexts/auth-context";
 import s from "./BookingForm.module.css";
 import toast from "react-hot-toast";
 
@@ -22,39 +21,31 @@ export const BookingForm = ({ teacher, closeModal }) => {
       .required("Phone number is required"),
   });
 
-  const { user } = useAuth();
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm({ resolver: yupResolver(validationSchema) });
 
-  const onSubmit = async ({ name, email, phoneNumber }) => {
-    try {
-      if (user) {
-        toast(
-          `Thank you, ${name}! Your trial lesson with ${teacher.name} has been booked successfully!`,
-          {
-            icon: "🎉",
-          }
-        );
-
-        localStorage.setItem(
-          "bookingDetails",
-          JSON.stringify({
-            name,
-            email,
-            phoneNumber,
-            teacher: { name: teacher.name, surname: teacher.surname },
-          })
-        );
-        closeModal();
-      } else {
-        throw new Error("User not authenticated");
+  const onSubmit = ({ name, email, phoneNumber }) => {
+    toast(
+      `Thank you, ${name}! Your trial lesson with ${teacher.name} has been booked successfully!`,
+      {
+        icon: "🎉",
       }
-    } catch (error) {
-      console.error("Booking Error:", error);
-    }
+    );
+
+    localStorage.setItem(
+      "bookingDetails",
+      JSON.stringify({
+        name,
+        email,
+        phoneNumber,
+        teacher: { name: teacher.name, surname: teacher.surname },
+      })
+    );
+
+    closeModal();
   };
 
   return (
