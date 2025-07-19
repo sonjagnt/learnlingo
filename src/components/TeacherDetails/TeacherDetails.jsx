@@ -43,7 +43,7 @@ export const TeacherDetails = ({ teacher }) => {
         Book trial lesson
       </button>
       <ModalWindow isOpen={isOpen} onClose={handleClose}>
-        {<BookingForm teacher={teacher} />}
+        {<BookingForm teacher={teacher} closeModal={handleClose} />}
       </ModalWindow>
     </div>
   );

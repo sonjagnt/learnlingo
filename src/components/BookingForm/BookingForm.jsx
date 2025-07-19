@@ -5,7 +5,7 @@ import { useAuth } from "../../contexts/auth-context";
 import s from "./BookingForm.module.css";
 import toast from "react-hot-toast";
 
-export const BookingForm = ({ teacher }) => {
+export const BookingForm = ({ teacher, closeModal }) => {
   const validationSchema = Yup.object().shape({
     name: Yup.string()
       .min(3, "Full name must be at least 3 characters long")
@@ -47,6 +47,7 @@ export const BookingForm = ({ teacher }) => {
           teacher: { name: teacher.name, surname: teacher.surname },
         })
       );
+      closeModal();
     } else {
       console.log("Something went wrong");
     }

@@ -107,7 +107,6 @@ export const fetchFavorites = async (userId) => {
         id,
         ...details,
       }));
-    console.log(response);
 
     return response;
   } else {

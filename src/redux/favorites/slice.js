@@ -16,8 +16,6 @@ export const loadFavs = createAsyncThunk(
   async ({ userId }, { rejectWithValue }) => {
     try {
       const data = await fetchFavorites(userId);
-      console.log(data);
-
       return data;
     } catch (err) {
       return rejectWithValue(err.message);
