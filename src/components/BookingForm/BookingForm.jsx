@@ -49,7 +49,7 @@ export const BookingForm = ({ teacher, closeModal }) => {
       );
       closeModal();
     } else {
-      console.log("Something went wrong");
+      console.error("error");
     }
   };
 
